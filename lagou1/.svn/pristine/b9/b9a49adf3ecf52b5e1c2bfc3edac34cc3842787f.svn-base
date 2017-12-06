@@ -1,0 +1,140 @@
+package com.lagou.domain;
+
+import java.util.HashSet;
+import java.util.Set;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+
+import static javax.persistence.GenerationType.IDENTITY;
+
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+
+import org.hibernate.annotations.OrderBy;
+
+/**
+ * Jobtype entity. @author MyEclipse Persistence Tools
+ */
+@Entity
+@Table(name = "jobtype", catalog = "lagou")
+public class Jobtype implements java.io.Serializable {
+	
+	@Override
+	public String toString() {
+		return "Jobtype [typeId=" + typeId + ", typeName=" + typeName
+				+ ", typeLv=" + typeLv + ", typePath=" + typePath + "]";
+	}
+
+	private Integer typeId;
+	private Jobtype jobtype;
+	private String typeName;
+	private Integer typeLv;
+	private String typePath;
+	@OrderBy(clause = "typeId")
+	private Set<Jobtype> jobtypes = new HashSet<Jobtype>(0);
+	private Set<Subscribe> subscribes = new HashSet<Subscribe>(0);
+	private Set<Jobinfo> jobinfos = new HashSet<Jobinfo>(0);
+
+	// Constructors
+
+	/** default constructor */
+	public Jobtype() {
+	}
+
+	/** full constructor */
+	public Jobtype(Jobtype jobtype, String typeName, Integer typeLv,
+			String typePath, Set<Jobtype> jobtypes, Set<Subscribe> subscribes,
+			Set<Jobinfo> jobinfos) {
+		this.jobtype = jobtype;
+		this.typeName = typeName;
+		this.typeLv = typeLv;
+		this.typePath = typePath;
+		this.jobtypes = jobtypes;
+		this.subscribes = subscribes;
+		this.jobinfos = jobinfos;
+	}
+
+	// Property accessors
+	@Id
+	@GeneratedValue(strategy = IDENTITY)
+	@Column(name = "type_id", unique = true, nullable = false)
+	public Integer getTypeId() {
+		return this.typeId;
+	}
+
+	public void setTypeId(Integer typeId) {
+		this.typeId = typeId;
+	}
+
+	@ManyToOne
+	@JoinColumn(name = "type_pid")
+	public Jobtype getJobtype() {
+		return this.jobtype;
+	}
+
+	public void setJobtype(Jobtype jobtype) {
+		this.jobtype = jobtype;
+	}
+
+	@Column(name = "type_name")
+	public String getTypeName() {
+		return this.typeName;
+	}
+
+	public void setTypeName(String typeName) {
+		this.typeName = typeName;
+	}
+
+	@Column(name = "type_lv")
+	public Integer getTypeLv() {
+		return this.typeLv;
+	}
+
+	public void setTypeLv(Integer typeLv) {
+		this.typeLv = typeLv;
+	}
+
+	@Column(name = "type_path")
+	public String getTypePath() {
+		return this.typePath;
+	}
+
+	public void setTypePath(String typePath) {
+		this.typePath = typePath;
+	}
+
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "jobtype")
+	public Set<Jobtype> getJobtypes() {
+		return this.jobtypes;
+	}
+
+	public void setJobtypes(Set<Jobtype> jobtypes) {
+		this.jobtypes = jobtypes;
+	}
+
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "jobtype")
+	public Set<Subscribe> getSubscribes() {
+		return this.subscribes;
+	}
+
+	public void setSubscribes(Set<Subscribe> subscribes) {
+		this.subscribes = subscribes;
+	}
+
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "jobtype")
+	public Set<Jobinfo> getJobinfos() {
+		return this.jobinfos;
+	}
+
+	public void setJobinfos(Set<Jobinfo> jobinfos) {
+		this.jobinfos = jobinfos;
+	}
+
+}

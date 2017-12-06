@@ -1,0 +1,162 @@
+package com.lagou.vo;
+
+import java.util.Date;
+
+import com.lagou.utils.JakerDateUtil;
+/**	多条件查询的VO对象
+ * 工作类型(jobTypeId)
+ *月薪(int minSal.int maxSal)
+ *工作经验(workEXP),
+ *学历(workEXP),
+ *工作性质(jobProp),
+ *发布时间(java.util.date)
+ *工作地点(城市)
+ **/
+public class JobSearchVO {
+	private JakerDateUtil dUtil = new JakerDateUtil();
+	private String jobname;
+	private Integer Sal;
+	private Integer edu;
+	private Integer workEXP;
+	private Integer jobProp;
+	private Integer Date;
+	private String city;
+	private Integer stage;
+	private Integer field;
+	private Date Sday;
+	private Date Eday;
+	private com.lagou.domain.Sal sala;
+	
+	
+
+	
+
+	
+	public JobSearchVO change(JobSearchVO jVo) {
+		if (jVo.getCity() == "全国") {
+			jVo.setCity(null);
+		}
+		if (jVo.getDate() == 1) {
+			this.Eday = new Date();
+			this.Sday =dUtil.Calculate(this.Eday, -1);
+		}
+		else if(jVo.getDate() == 2){
+			this.Eday = new Date();
+			this.Sday =dUtil.Calculate(this.Eday, -3);
+		}
+		else if(jVo.getDate() == 3){
+			this.Eday = new Date();
+			this.Sday =dUtil.Calculate(this.Eday, -7);
+		}
+		else if(jVo.getDate() == 4){
+			this.Eday = new Date();
+			this.Sday =dUtil.Calculate(this.Eday, -30);
+		}
+		else if(jVo.getDate() == 0){
+			this.Eday = null;
+			this.Sday = null;
+		}
+		if (jVo.getEdu() == 0) {
+			jVo.setEdu(null);
+		}
+		if (jVo.getField() == 0) {
+			jVo.setField(null);
+		}
+		if (jVo.getJobname() == ""||jVo.getJobname()==null) {
+			jVo.setJobname(null);
+		}
+		if (jVo.getJobProp() == 0) {
+			jVo.setJobProp(null);
+		}
+		if (jVo.getStage() == 0) {
+			jVo.setStage(null);
+		}
+		if (jVo.getWorkEXP() == 0) {
+			jVo.setWorkEXP(null);
+		}
+
+		return jVo;
+	}
+	
+	public JakerDateUtil getdUtil() {
+		return dUtil;
+	}
+	public void setdUtil(JakerDateUtil dUtil) {
+		this.dUtil = dUtil;
+	}
+	public com.lagou.domain.Sal getSala() {
+		return sala;
+	}
+	public void setSala(com.lagou.domain.Sal sala) {
+		this.sala = sala;
+	}
+	public Date getSday() {
+		return Sday;
+	}
+	public void setSday(Date sday) {
+		Sday = sday;
+	}
+	public Date getEday() {
+		return Eday;
+	}
+	public void setEday(Date eday) {
+		Eday = eday;
+	}
+	public String getJobname() {
+		return jobname;
+	}
+	public void setJobname(String jobname) {
+		this.jobname = jobname;
+	}
+	public Integer getStage() {
+		return stage;
+	}
+	public void setStage(Integer stage) {
+		this.stage = stage;
+	}
+	public Integer getField() {
+		return field;
+	}
+	public void setField(Integer field) {
+		this.field = field;
+	}
+	public Integer getEdu() {
+		return edu;
+	}
+	public void setEdu(Integer edu) {
+		this.edu = edu;
+	}
+	public String getCity() {
+		return city;
+	}
+	public void setCity(String city) {
+		this.city = city;
+	}
+	public JobSearchVO() {
+		super();
+	}
+	public Integer getSal() {
+		return Sal;
+	}
+	public void setSal(Integer sal) {
+		Sal = sal;
+	}
+	public Integer getWorkEXP() {
+		return workEXP;
+	}
+	public void setWorkEXP(Integer workEXP) {
+		this.workEXP = workEXP;
+	}
+	public Integer getJobProp() {
+		return jobProp;
+	}
+	public void setJobProp(Integer jobProp) {
+		this.jobProp = jobProp;
+	}
+	public Integer getDate() {
+		return Date;
+	}
+	public void setDate(Integer date) {
+		Date = date;
+	}
+}

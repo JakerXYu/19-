@@ -1,0 +1,39 @@
+package com.lagou.bizImp;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.lagou.biz.CompanyinfoBIZ;
+import com.lagou.biz.UserinfoBIZ;
+import com.lagou.dao.CompanyinfoDAO;
+import com.lagou.dao.UserinfoDAO;
+import com.lagou.domain.Companyinfo;
+import com.lagou.domain.Userinfo;
+import com.lagou.exception.NameExist;
+@Service("UserinfoBIZImp")
+public class UserinfoBIZImp implements UserinfoBIZ {
+		@Autowired@Qualifier("UserinfoDAO")
+		private UserinfoDAO userinfoDAO;
+		@Transactional(propagation=Propagation.REQUIRED,rollbackFor={NameExist.class})
+		public void reg(Userinfo user) throws NameExist{
+				if(this.userinfoDAO.findByUserName(user.getUserinfoEmail())==null){
+					this.userinfoDAO.save(user);
+				}else {
+					throw new NameExist("用户名已存在！");
+				}
+			}
+		public UserinfoDAO getUserinfoDAO() {
+			return userinfoDAO;
+		}
+		public void setUserinfoDAO(UserinfoDAO userinfoDAO) {
+			this.userinfoDAO = userinfoDAO;
+		}
+	
+}
+
+
+
+

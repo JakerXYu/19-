@@ -1,0 +1,53 @@
+package com.lagou.bizImp;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.lagou.biz.ResumeinfoBIZ;
+import com.lagou.dao.ResumeinfoDAO;
+import com.lagou.domain.Companyinfo;
+import com.lagou.domain.Jobdeliver;
+import com.lagou.domain.Resumeinfo;
+import com.lagou.vo.ResumeSearchVO;
+@Service("ResumeinfoBIZImp")
+public class ResumeinfoBIZImp implements ResumeinfoBIZ {
+	@Autowired@Qualifier("ResumeinfoDAO")
+	private ResumeinfoDAO resumeinfoDAO;
+	
+	@Transactional(propagation=Propagation.REQUIRED,readOnly=true)
+	@Override
+	public List<Resumeinfo> findByUser(int userId) {
+		return this.resumeinfoDAO.findByUser(userId);
+		
+	}
+	
+	@Transactional(propagation=Propagation.REQUIRED,rollbackFor={Exception.class})
+	@Override
+	public void update(Resumeinfo resume) {
+		this.resumeinfoDAO.update(resume);
+	}
+
+
+	public ResumeinfoDAO getResumeinfoDAO() {
+		return resumeinfoDAO;
+	}
+
+	public void setResumeinfoDAO(ResumeinfoDAO resumeinfoDAO) {
+		this.resumeinfoDAO = resumeinfoDAO;
+	}
+	@Transactional(propagation=Propagation.REQUIRED,readOnly=true)
+	public List<Jobdeliver> findByResumeStatuss(Companyinfo companyinfo, int status,
+			ResumeSearchVO resumeSearchVO) {
+		return resumeinfoDAO.findByResumeStatuss(companyinfo, status, resumeSearchVO);
+	}
+	@Transactional(propagation=Propagation.REQUIRED,readOnly=true)
+	public List<Jobdeliver> findByResumeStatuss(Companyinfo companyinfo, int status) {
+		return resumeinfoDAO.findByResumeStatuss(companyinfo, status);
+	}
+
+}

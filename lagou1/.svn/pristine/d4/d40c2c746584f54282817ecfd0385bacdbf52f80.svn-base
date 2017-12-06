@@ -1,0 +1,30 @@
+package com.lagou.biz;
+
+import java.util.List;
+
+import com.lagou.domain.Jobdeliver;
+import com.lagou.domain.Resumeinfo;
+import com.lagou.domain.Resumestatus;
+import com.lagou.domain.Userinfo;
+
+/**
+ * @author 陶雅楠
+ *投递简历接口类
+ */
+public interface JobdeliverBIZ {
+	/**
+	 * 把一个简历投递记录保存到简历投递表里
+	 * @param 简历投递记录
+	 * 
+	 */	
+	public void save(Jobdeliver transientInstance);
+/**
+ * 
+ * 查看我投递的简历状态
+ * @param userId 用户Id
+ * @return  
+ */
+	public List<Jobdeliver> findByResumeStatus(Userinfo userinfo,int status);
+
+	
+}

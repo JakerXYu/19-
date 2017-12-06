@@ -1,0 +1,56 @@
+package com.lagou.bizImp;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.lagou.biz.JobdeliverBIZ;
+import com.lagou.dao.JobdeliverDAO;
+import com.lagou.domain.Jobdeliver;
+import com.lagou.domain.Resumeinfo;
+import com.lagou.domain.Resumestatus;
+import com.lagou.domain.Userinfo;
+
+/**
+ * 
+ * @author 陶雅楠
+ *
+ */
+@Service("JobdeliverBIZImp")
+public class JobdeliverBIZImp implements JobdeliverBIZ{
+	@Autowired@Qualifier("JobdeliverDAO")
+    private JobdeliverDAO jobdeliverDao;
+	/**
+	 * 把一个简历对象保存到简历投递表里
+	 * @param 简历对象resumeinfo
+	 * 
+	 */	
+	@Transactional(propagation=Propagation.REQUIRED,rollbackFor={Exception.class})
+	@Override
+	public void save(Resumeinfo resumeinfo) {
+		this.jobdeliverDao.save(resumeinfo);
+	}
+	/**
+	 * 
+	 * 查看我投递的简历状态
+	 * @param userId 用户Id
+	 * @return  
+	 */
+	@Override
+	public List<Jobdeliver> findByResumeStatus(Userinfo userinfo, int status) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	public JobdeliverDAO getJobdeliverDao() {
+		return jobdeliverDao;
+	}
+	public void setJobdeliverDao(JobdeliverDAO jobdeliverDao) {
+		this.jobdeliverDao = jobdeliverDao;
+	}
+
+}

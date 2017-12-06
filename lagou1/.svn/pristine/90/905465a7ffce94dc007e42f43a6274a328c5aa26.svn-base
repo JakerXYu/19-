@@ -1,0 +1,209 @@
+package com.lagou.domain;
+
+import java.util.HashSet;
+import java.util.Set;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+
+import static javax.persistence.GenerationType.IDENTITY;
+
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+
+import org.hibernate.annotations.DynamicUpdate;
+
+/**
+ * Companyinfo entity. @author MyEclipse Persistence Tools
+ */
+@Entity
+@Table(name = "companyinfo", catalog = "lagou")
+@DynamicUpdate
+public class Companyinfo implements java.io.Serializable {
+
+	// Fields
+
+	private Integer companyId;
+	private Companystage companystage;
+	private Companysize companysize;
+	private Companyfield companyfield;
+	private Companycheck companycheck;
+	private String companyLogname;
+	private String companyPassword;
+	private String companyName;
+	private String companyLogo;
+	private String companyIndex;
+	private String companyAddress;
+	private Set<Userinfo> userinfos = new HashSet<Userinfo>(0);
+	private Set<Jobinfo> jobinfos = new HashSet<Jobinfo>(0);
+	private Set<Message> messages = new HashSet<Message>(0);
+
+	// Constructors
+
+	/** default constructor */
+	public Companyinfo() {
+	}
+
+	/** full constructor */
+	public Companyinfo(Companystage companystage, Companysize companysize,
+			Companyfield companyfield, Companycheck companycheck,
+			String companyLogname, String companyPassword, String companyName,
+			String companyLogo, String companyIndex, String companyAddress,
+			Set<Userinfo> userinfos, Set<Jobinfo> jobinfos,
+			Set<Message> messages) {
+		this.companystage = companystage;
+		this.companysize = companysize;
+		this.companyfield = companyfield;
+		this.companycheck = companycheck;
+		this.companyLogname = companyLogname;
+		this.companyPassword = companyPassword;
+		this.companyName = companyName;
+		this.companyLogo = companyLogo;
+		this.companyIndex = companyIndex;
+		this.companyAddress = companyAddress;
+		this.userinfos = userinfos;
+		this.jobinfos = jobinfos;
+		this.messages = messages;
+	}
+
+	// Property accessors
+	@Id
+	@GeneratedValue(strategy = IDENTITY)
+	@Column(name = "company_id", unique = true, nullable = false)
+	public Integer getCompanyId() {
+		return this.companyId;
+	}
+
+	public void setCompanyId(Integer companyId) {
+		this.companyId = companyId;
+	}
+
+	@ManyToOne
+	@JoinColumn(name = "company_stage")
+	public Companystage getCompanystage() {
+		return this.companystage;
+	}
+
+	public void setCompanystage(Companystage companystage) {
+		this.companystage = companystage;
+	}
+
+	@ManyToOne
+	@JoinColumn(name = "company_size")
+	public Companysize getCompanysize() {
+		return this.companysize;
+	}
+
+	public void setCompanysize(Companysize companysize) {
+		this.companysize = companysize;
+	}
+
+	@ManyToOne
+	@JoinColumn(name = "company_field")
+	public Companyfield getCompanyfield() {
+		return this.companyfield;
+	}
+
+	public void setCompanyfield(Companyfield companyfield) {
+		this.companyfield = companyfield;
+	}
+
+	@ManyToOne
+	@JoinColumn(name = "company_checked")
+	public Companycheck getCompanycheck() {
+		return this.companycheck;
+	}
+
+	public void setCompanycheck(Companycheck companycheck) {
+		this.companycheck = companycheck;
+	}
+
+	@Column(name = "company_logname")
+	public String getCompanyLogname() {
+		return this.companyLogname;
+	}
+
+	public void setCompanyLogname(String companyLogname) {
+		this.companyLogname = companyLogname;
+	}
+
+	@Column(name = "company_password", length = 32)
+	public String getCompanyPassword() {
+		return this.companyPassword;
+	}
+
+	public void setCompanyPassword(String companyPassword) {
+		this.companyPassword = companyPassword;
+	}
+
+	@Column(name = "company_name")
+	public String getCompanyName() {
+		return this.companyName;
+	}
+
+	public void setCompanyName(String companyName) {
+		this.companyName = companyName;
+	}
+
+	@Column(name = "company_logo")
+	public String getCompanyLogo() {
+		return this.companyLogo;
+	}
+
+	public void setCompanyLogo(String companyLogo) {
+		this.companyLogo = companyLogo;
+	}
+
+	@Column(name = "company_index")
+	public String getCompanyIndex() {
+		return this.companyIndex;
+	}
+
+	public void setCompanyIndex(String companyIndex) {
+		this.companyIndex = companyIndex;
+	}
+
+	@Column(name = "company_address", length = 11)
+	public String getCompanyAddress() {
+		return this.companyAddress;
+	}
+
+	public void setCompanyAddress(String companyAddress) {
+		this.companyAddress = companyAddress;
+	}
+
+	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "companyinfos")
+	public Set<Userinfo> getUserinfos() {
+		return this.userinfos;
+	}
+
+	public void setUserinfos(Set<Userinfo> userinfos) {
+		this.userinfos = userinfos;
+	}
+
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "companyinfo")
+	public Set<Jobinfo> getJobinfos() {
+		return this.jobinfos;
+	}
+
+	public void setJobinfos(Set<Jobinfo> jobinfos) {
+		this.jobinfos = jobinfos;
+	}
+
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "companyinfo")
+	public Set<Message> getMessages() {
+		return this.messages;
+	}
+
+	public void setMessages(Set<Message> messages) {
+		this.messages = messages;
+	}
+
+}

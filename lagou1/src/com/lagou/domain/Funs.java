@@ -1,0 +1,135 @@
+package com.lagou.domain;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+
+import static javax.persistence.GenerationType.IDENTITY;
+
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
+import javax.persistence.Table;
+
+
+/**
+ * Funs entity. @author MyEclipse Persistence Tools
+ */
+@Entity
+@Table(name = "funs", catalog = "lagou")
+public class Funs implements java.io.Serializable {
+
+	// Fields
+
+	private Integer funId;
+	private Funs funs;
+	private String funName;
+	private String funUrl;
+	private Integer funLevel;
+	private String funTarget;
+	private List<Roles> roleses = new ArrayList<Roles>(0);
+	private List<Funs> funses = new ArrayList<Funs>(0);//当前节点的子节点集合
+	// Constructors
+
+	/** default constructor */
+	public Funs() {
+	}
+
+	/** full constructor */
+	public Funs(Funs funs, String funName, String funUrl, Integer funLevel,
+			String funTarget, List<Roles> roleses, List<Funs> funses) {
+		this.funs = funs;
+		this.funName = funName;
+		this.funUrl = funUrl;
+		this.funLevel = funLevel;
+		this.funTarget = funTarget;
+		this.roleses = roleses;
+		this.funses = funses;
+	}
+
+	// Property accessors
+	@Id
+	@GeneratedValue(strategy = IDENTITY)
+	@Column(name = "fun_id", unique = true, nullable = false)
+	public Integer getFunId() {
+		return this.funId;
+	}
+
+	public void setFunId(Integer funId) {
+		this.funId = funId;
+	}
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "fun_pid")
+	public Funs getFuns() {
+		return this.funs;
+	}
+
+	public void setFuns(Funs funs) {
+		this.funs = funs;
+	}
+
+	@Column(name = "fun_name")
+	public String getFunName() {
+		return this.funName;
+	}
+
+	public void setFunName(String funName) {
+		this.funName = funName;
+	}
+
+	@Column(name = "fun_url")
+	public String getFunUrl() {
+		return this.funUrl;
+	}
+
+	public void setFunUrl(String funUrl) {
+		this.funUrl = funUrl;
+	}
+
+	@Column(name = "fun_level")
+	public Integer getFunLevel() {
+		return this.funLevel;
+	}
+
+	public void setFunLevel(Integer funLevel) {
+		this.funLevel = funLevel;
+	}
+
+	@Column(name = "fun_target")
+	public String getFunTarget() {
+		return this.funTarget;
+	}
+
+	public void setFunTarget(String funTarget) {
+		this.funTarget = funTarget;
+	}
+	@OrderBy("roleId desc")
+	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "funses")
+	public List<Roles> getRoleses() {
+		return this.roleses;
+	}
+
+	public void setRoleses(List<Roles> roleses) {
+		this.roleses = roleses;
+	}
+	
+	@OrderBy("funId desc")
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "funs")
+	public List<Funs> getFunses() {
+		return this.funses;
+	}
+
+	public void setFunses(List<Funs> funses) {
+		this.funses = funses;
+	}
+
+}

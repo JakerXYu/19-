@@ -1,0 +1,7 @@
+package com.lagou.bizImp;
+
+import com.lagou.biz.UserinfoBIZ;
+
+public class UserinfoBIZImp implements UserinfoBIZ {
+
+}

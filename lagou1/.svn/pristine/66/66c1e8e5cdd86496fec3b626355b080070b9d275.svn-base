@@ -1,0 +1,14 @@
+package com.lagou.biz;
+
+import java.util.List;
+
+import com.lagou.domain.Jobtype;
+
+public interface JobTypeBIZ {
+
+	/*
+	 * 查找一级的所有
+	 */
+	public List<Jobtype> findBylv();
+
+}

@@ -1,0 +1,51 @@
+package com.lagou.action;
+
+import org.apache.struts2.convention.annotation.Action;
+import org.apache.struts2.convention.annotation.Namespace;
+import org.apache.struts2.convention.annotation.ParentPackage;
+import org.apache.struts2.convention.annotation.Result;
+import org.hibernate.envers.AuditOverride;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Controller;
+
+import com.lagou.biz.JobdeliverBIZ;
+import com.lagou.bizImp.JobdeliverBIZImp;
+import com.lagou.domain.Jobdeliver;
+import com.opensymphony.xwork2.ActionSupport;
+
+@Controller("JobdeliverAction")
+@Scope("prototype")
+@Namespace("/jobdeliver")
+@ParentPackage("struts-default")
+public class JobdeliverAction extends ActionSupport{
+	@AuditOverride@Qualifier("JobdeliverBIZImp")//依赖注入
+	private JobdeliverBIZImp jobdeliverBIZImp;
+	
+	private Jobdeliver transientInstance;
+	
+	@Action(value="save",results={@Result(location="/jobSeeker/deliveryResume.jsp")})
+	public String save(){
+		jobdeliverBIZImp.save(transientInstance);
+		return ActionSupport.SUCCESS;
+	}
+
+	public JobdeliverBIZImp getJobdeliverBIZImp() {
+		return jobdeliverBIZImp;
+	}
+
+	public void setJobdeliverBIZImp(JobdeliverBIZImp jobdeliverBIZImp) {
+		this.jobdeliverBIZImp = jobdeliverBIZImp;
+	}
+
+	public Jobdeliver getTransientInstance() {
+		return transientInstance;
+	}
+
+	public void setTransientInstance(Jobdeliver transientInstance) {
+		this.transientInstance = transientInstance;
+	}
+
+
+
+}

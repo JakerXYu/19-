@@ -1,0 +1,16 @@
+package com.lagou.bizImp;
+
+import com.lagou.biz.SubscribeBIZ;
+import com.lagou.domain.Subscribe;
+
+
+
+public class SubscribeBIZImp implements SubscribeBIZ {
+
+	@Override
+	public void save(Subscribe subscribe) {
+		// TODO Auto-generated method stub
+
+	}
+
+}

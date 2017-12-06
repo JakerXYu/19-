@@ -1,0 +1,16 @@
+#MyEclipse Hibernate Properties
+#Mon Jun 05 17:11:35 CST 2017
+genVersionTag=false
+genAnnotations=false
+configFile=/lagou1/src/hibernate.cfg.xml
+reStrategyClass=
+sessionFactoryId=
+profile=
+detectM2M=false
+genBasicCompId=false
+keyGenerator=
+createConfigFile=true
+basePersistenceClass=
+detectO2O=false
+useJavaTypes=true
+reSettingsFile=

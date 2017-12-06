@@ -1,0 +1,11 @@
+package com.lagou.biz;
+
+import com.lagou.domain.Userinfo;
+import com.lagou.exception.NameMissException;
+import com.lagou.exception.PassErrorException;
+
+public interface UserinfoBIZ {
+//public Userinfo findByUsername(String username);
+	public Userinfo userlogin(String username,String password) throws NameMissException, PassErrorException;
+
+}

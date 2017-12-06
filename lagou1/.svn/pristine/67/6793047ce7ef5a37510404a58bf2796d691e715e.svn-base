@@ -1,0 +1,59 @@
+package com.lagou.bizImp;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.lagou.biz.AdminsBIZ;
+import com.lagou.dao.AdminsDAO;
+import com.lagou.domain.Admins;
+
+@Service("AdminsBIZImp")
+public class AdminsBIZImp implements AdminsBIZ {
+	@Autowired@Qualifier("AdminsDAO")
+	private AdminsDAO adminsDAO;
+	
+	@Override
+	@Transactional(propagation=Propagation.REQUIRED,readOnly=true)
+	public List<Admins> findAll() {
+		return (List<Admins>) adminsDAO.findAll();
+	}
+	
+	@Override
+	@Transactional(propagation=Propagation.REQUIRED,rollbackFor={Exception.class})
+	public void saveAdmins(Admins admins) {
+		this.adminsDAO.save(admins);
+	}
+	
+	
+	@Override
+	@Transactional(propagation=Propagation.REQUIRED,rollbackFor={Exception.class})
+	public void delete(int adminId) {
+		this.adminsDAO.delete(adminId);
+	}
+	
+	@Override
+	@Transactional(propagation=Propagation.REQUIRED,readOnly=true)
+	public Admins findByName(String adminsName) {
+		
+		return this.adminsDAO.findByName(adminsName);
+	}
+
+	
+	
+	public AdminsDAO getAdminsDAO() {
+		return adminsDAO;
+	}
+
+	public void setAdminsDAO(AdminsDAO adminsDAO) {
+		this.adminsDAO = adminsDAO;
+	}
+
+
+	
+	
+}

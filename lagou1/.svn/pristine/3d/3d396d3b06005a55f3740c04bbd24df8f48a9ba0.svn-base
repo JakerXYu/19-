@@ -1,0 +1,32 @@
+package com.lagou.biz;
+
+import java.util.List;
+
+import com.lagou.domain.Admins;
+
+public interface AdminsBIZ {
+	/**
+	 * 查找所有的管理员
+	 * @return
+	 */
+	public List<Admins> findAll();
+	
+	/**
+	 * 保存管理员
+	 * @param admins
+	 */
+	public void saveAdmins(Admins admins);
+	
+	/**
+	 * 按照编号删除管理员
+	 * @param adminId
+	 */
+	public void delete(int  adminId);
+	
+	/**
+	 * 按照名字查找管理员
+	 * @param AdminsName
+	 * @return
+	 */
+	public Admins findByName(String AdminsName);
+}

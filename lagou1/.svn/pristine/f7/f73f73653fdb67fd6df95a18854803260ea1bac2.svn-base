@@ -1,0 +1,64 @@
+package com.lagou.action;
+
+import java.util.List;
+import java.util.Map;
+
+import org.apache.struts2.convention.annotation.Action;
+import org.apache.struts2.convention.annotation.Namespace;
+import org.apache.struts2.convention.annotation.ParentPackage;
+import org.apache.struts2.convention.annotation.Result;
+import org.apache.struts2.convention.annotation.Results;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Controller;
+
+import com.lagou.bizImp.AdminsBIZImp;
+import com.lagou.domain.Admins;
+import com.opensymphony.xwork2.ActionContext;
+import com.opensymphony.xwork2.ActionSupport;
+@Controller("AdminsAction")
+@ParentPackage("struts-default")
+@Scope("prototype")
+@Namespace("/Admins")
+public class AdminsAction extends ActionSupport{
+	@Autowired@Qualifier("AdminsBIZImp")
+	private AdminsBIZImp adminBIZImp;
+	
+	private Admins admins;
+	@Action(value="findall",results={
+			@Result(location="/manager/show.jsp")
+	})
+	private String findAll(){
+		List<Admins> adminsList=this.adminBIZImp.findAll();
+		ActionContext context=ActionContext.getContext();
+		Map<String, Object> map_re=(Map<String, Object>) context.get("request");
+		map_re.put("adminsList", adminsList);
+		return ActionSupport.SUCCESS;
+	
+	}
+	
+	private String save(){
+		
+		return ActionSupport.SUCCESS;
+		
+	}
+	
+	
+	public Admins getAdmins() {
+		return admins;
+	}
+
+	public void setAdmins(Admins admins) {
+		this.admins = admins;
+	}
+
+	public AdminsBIZImp getAdminBIZImp() {
+		return adminBIZImp;
+	}
+	
+	public void setAdminBIZImp(AdminsBIZImp adminBIZImp) {
+		this.adminBIZImp = adminBIZImp;
+	}
+	
+}

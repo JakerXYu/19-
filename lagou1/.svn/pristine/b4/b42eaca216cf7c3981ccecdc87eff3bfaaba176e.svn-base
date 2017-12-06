@@ -1,0 +1,192 @@
+package com.lagou.action;
+
+import java.util.Map;
+
+import org.apache.struts2.convention.annotation.Action;
+import org.apache.struts2.convention.annotation.Namespace;
+import org.apache.struts2.convention.annotation.ParentPackage;
+import org.apache.struts2.convention.annotation.Result;
+import org.apache.struts2.convention.annotation.Results;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Controller;
+
+import com.lagou.biz.SubscribeBIZ;
+import com.lagou.domain.Cityinfo;
+import com.lagou.domain.Companyfield;
+import com.lagou.domain.Companystage;
+import com.lagou.domain.Jobtype;
+import com.lagou.domain.Sal;
+import com.lagou.domain.Subscribe;
+import com.lagou.domain.Userinfo;
+import com.opensymphony.xwork2.ActionContext;
+import com.opensymphony.xwork2.ActionSupport;
+@Controller("SubscribeSaveAction")
+@ParentPackage("struts-default")
+@Namespace("/jobSeeker")
+@Scope("prototype")
+public class SubscribeOperaAction extends ActionSupport {
+	@Autowired@Qualifier("SubscribeBIZImp")
+	private SubscribeBIZ subscribeBIZ;
+	private String weekday;
+	private String jobtypeId;
+	private String cityId;
+	private String stageId;
+	private String fieldId;
+	private String salId;
+	private Subscribe subscribe;
+
+
+	
+	@Action(value="save", results={
+		@Result(name="ok" , type="redirect" , location="/jobSeeker/mySubscribedJob.jsp"),
+		@Result(name="no" , location="/jobSeeker/subscribeJob.jsp")
+	})/*, type="redirectAction"*/
+	public String save(){
+
+		Map<String, Object> sess = ActionContext.getContext().getSession();
+		Userinfo userinfo = new Userinfo();
+		userinfo.setUserinfoUsername("479474232@qq.com");
+		userinfo.setUserinfoPassword("123456");
+		sess.put("li", userinfo);
+		Userinfo user = (Userinfo) sess.get("li");
+		System.out.println(user.getUserinfoUsername());
+		getSubscribe().setUserinfo(user);
+		
+		if(weekday!=null && !"".endsWith(weekday)){
+			int week = Integer.parseInt(weekday);
+			getSubscribe().setSubWeekday(week);
+			
+		}
+		if(jobtypeId!=null && !"".equals(jobtypeId)){
+			int typeid = Integer.parseInt(jobtypeId);
+			Jobtype jobtype = new Jobtype();
+			jobtype.setTypeId(typeid);
+			getSubscribe().setJobtype(jobtype);
+			
+		}
+		if(cityId!=null && !"".equals(cityId)){
+			int cityid = Integer.parseInt(cityId);
+			Cityinfo cityinfo = new Cityinfo();
+			cityinfo.setCityId(cityid);
+			getSubscribe().setCityinfo(cityinfo);
+			
+		}
+		if(stageId!=null && "".equals(stageId)){
+			int stageid = Integer.parseInt(stageId);
+			Companystage companystage = new Companystage();
+			companystage.setStageId(stageid);
+			getSubscribe().setCompanystage(companystage);
+			
+			
+		}
+		if(fieldId!=null && "".equals(fieldId)){
+			int fieldid = Integer.parseInt(fieldId);
+			Companyfield companyfield = new Companyfield();
+			companyfield.setFieldId(fieldid);
+			getSubscribe().setCompanyfield(companyfield);
+			
+		}
+		if(salId!=null &&"".equals(salId)){
+			int salid = Integer.parseInt(salId);
+			Sal sal = new Sal();
+			sal.setSalId(salid);
+			getSubscribe().setSal(sal);
+			
+		}
+
+		if(subscribeBIZ.save(subscribe)){
+			return "ok";
+			
+		}else{
+			return "no";
+			
+		}
+		
+	}
+
+	@Action(value="findbyuser" , results={
+			@Result(location="/jobSeeker/mySubscribedJob.jsp")
+	})
+	public String findbyuser(){
+		Map<String,Object> sess = ActionContext.getContext().getSession();
+		sess.get("userinfo");
+		return null;
+		
+		
+	}
+	public SubscribeBIZ getSubscribeBIZ() {
+		return subscribeBIZ;
+	}
+
+	public void setSubscribeBIZ(SubscribeBIZ subscribeBIZ) {
+		this.subscribeBIZ = subscribeBIZ;
+	}
+
+
+	public String getWeekday() {
+		return weekday;
+	}
+
+	public void setWeekday(String weekday) {
+		this.weekday = weekday;
+	}
+
+	public String getJobtypeId() {
+		return jobtypeId;
+	}
+
+	public void setJobtypeId(String jobtypeId) {
+		this.jobtypeId = jobtypeId;
+	}
+
+	public String getCityId() {
+		return cityId;
+	}
+
+	public void setCityId(String cityId) {
+		this.cityId = cityId;
+	}
+
+	public String getStageId() {
+		return stageId;
+	}
+
+	public void setStageId(String stageId) {
+		this.stageId = stageId;
+	}
+
+	public String getFieldId() {
+		return fieldId;
+	}
+
+	public void setFieldId(String fieldId) {
+		this.fieldId = fieldId;
+	}
+
+	public String getSalId() {
+		return salId;
+	}
+
+	public void setSalId(String salId) {
+		this.salId = salId;
+	}
+
+	public Subscribe getSubscribe() {
+		return subscribe;
+	}
+
+	public void setSubscribe(Subscribe subscribe) {
+		this.subscribe = subscribe;
+	}
+
+	
+	
+
+	
+	
+	
+	
+
+}

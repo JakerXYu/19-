@@ -1,0 +1,56 @@
+package com.lagou.bizImp;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
+
+import com.lagou.biz.UserinfoBIZ;
+import com.lagou.dao.UserinfoDAO;
+import com.lagou.domain.Userinfo;
+import com.lagou.exception.NameMissException;
+import com.lagou.exception.PassErrorException;
+
+@Service("UserinfoBIZImp")
+public class UserinfoBIZImp implements UserinfoBIZ {
+	@Autowired@Qualifier("UserinfoDAO")
+	UserinfoDAO userinfoDAO;
+
+	public UserinfoDAO getUserinfoDAO() {
+		return userinfoDAO;
+	}
+
+	public void setUserinfoDAO(UserinfoDAO userinfoDAO) {
+		this.userinfoDAO = userinfoDAO;
+	}
+
+	@Override
+	public Userinfo userlogin(String username, String password) throws NameMissException,PassErrorException {
+		Userinfo userinfo=userinfoDAO.findByUsername(username);
+		if (userinfo==null) {
+		throw new NameMissException("用户名不存在！");
+		}
+		else{
+		if(userinfo.getUserinfoPassword().equals(password)){
+			return userinfo;
+		}
+		else {
+			throw new PassErrorException("密码错误！");
+		}
+		}
+		
+	}
+
+
+
+
+//	@Override
+//	public Userinfo findByUsername(String username) {
+//		Userinfo userinfo =userinfoDAO.findByUsername(username);
+//		return userinfo;
+//	}
+	
+	
+
+
+	
+}

@@ -1,0 +1,7 @@
+package com.lagou.bizImp;
+
+import com.lagou.biz.AuditionjudgeBIZ;
+
+public class AuditionjudgeBIZImp implements AuditionjudgeBIZ{
+
+}

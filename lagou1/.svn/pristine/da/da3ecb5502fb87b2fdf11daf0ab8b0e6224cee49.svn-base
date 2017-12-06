@@ -1,0 +1,49 @@
+package com.lagou.vo;
+
+import java.util.Date;
+
+public class ResumeSearchVO {
+	/**
+	 * 简历筛选条件
+	 * 工作年限
+	 * 最低学历
+	 * 简历审核状态
+	 * 版本1.0
+	 */
+	private Integer jobexp;
+	private Integer jobedu;
+	private Integer resStatus;
+
+	public ResumeSearchVO(Integer jobexp, Integer jobedu, Integer resStatus) {
+		super();
+		this.jobexp = jobexp;
+		this.jobedu = jobedu;
+		this.resStatus = resStatus;
+	}
+
+	public Integer getJobexp() {
+		return jobexp;
+	}
+
+	public void setJobexp(Integer jobexp) {
+		this.jobexp = jobexp;
+	}
+
+	public Integer getJobedu() {
+		return jobedu;
+	}
+
+	public void setJobedu(Integer jobedu) {
+		this.jobedu = jobedu;
+	}
+
+	public Integer getResStatus() {
+		return resStatus;
+	}
+
+	public void setResStatus(Integer resStatus) {
+		this.resStatus = resStatus;
+
+	}
+
+}

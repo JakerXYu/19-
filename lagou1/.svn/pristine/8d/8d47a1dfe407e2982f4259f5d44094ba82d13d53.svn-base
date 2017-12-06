@@ -1,0 +1,11 @@
+package com.lagou.biz;
+
+import com.lagou.domain.Subscribe;
+
+public interface SubscribeBIZ {
+	/*
+	 * 添加订阅职位的信息
+	 */
+	public void save(Subscribe subscribe);
+
+}

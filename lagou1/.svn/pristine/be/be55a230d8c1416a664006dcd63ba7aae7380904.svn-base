@@ -1,0 +1,82 @@
+package com.lagou.action;
+
+import java.util.List;
+import java.util.Map;
+
+import org.apache.struts2.convention.annotation.Action;
+import org.apache.struts2.convention.annotation.InterceptorRef;
+import org.apache.struts2.convention.annotation.Namespace;
+import org.apache.struts2.convention.annotation.ParentPackage;
+import org.apache.struts2.convention.annotation.Result;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Controller;
+
+import com.lagou.bizImp.JobinfoBIZImp;
+import com.lagou.domain.Jobinfo;
+import com.opensymphony.xwork2.ActionContext;
+import com.opensymphony.xwork2.ActionSupport;
+
+
+@Controller("JobinfoAction")
+@ParentPackage("json-default")
+@Scope("prototype")@Namespace("/jobinfo")
+public class JobinfoAction extends ActionSupport {
+	private String jsonText;
+	
+	@Autowired@Qualifier("JobinfoBIZImp")
+	private JobinfoBIZImp jobinfoBIZ;
+	@Action(value="findall",results={@Result(location="/jobinfo/test.jsp")})
+	public String findAll(){
+		List<Jobinfo> jobinfoList = this.jobinfoBIZ.findAll();
+		ActionContext context = ActionContext.getContext();
+		Map<String, Object>req_map = (Map<String, Object>)context.get("request"); 
+		
+		req_map.put("jobinfoList", jobinfoList);
+		return ActionSupport.SUCCESS;
+	}
+	
+	@Action(value="findnew" ,
+			results={@Result(name="success",type="json",params={"root","jsonText"})},
+			interceptorRefs={
+				@InterceptorRef("defaultStack"),
+				@InterceptorRef("json")
+			}
+		)
+	public String findNew(){
+		this.jsonText= this.jobinfoBIZ.findByNew();
+		return ActionSupport.SUCCESS;
+	}
+	
+	@Action(value="findhot" ,
+			results={@Result(name="success",type="json",params={"root","jsonText"})},
+			interceptorRefs={
+			@InterceptorRef("defaultStack"),
+			@InterceptorRef("json")
+	}
+			)
+	public String findHot(){
+		this.jsonText= this.jobinfoBIZ.findByHot();
+		return ActionSupport.SUCCESS;
+	}
+	
+	public String getJsonText() {
+		return jsonText;
+	}
+
+	public void setJsonText(String jsonText) {
+		this.jsonText = jsonText;
+	}
+
+	public JobinfoBIZImp getJobinfoBIZ() {
+		return jobinfoBIZ;
+	}
+	public void setJobinfoBIZ(JobinfoBIZImp jobinfoBIZ) {
+		this.jobinfoBIZ = jobinfoBIZ;
+	}
+	
+	
+	
+	
+}

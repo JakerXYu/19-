@@ -1,0 +1,54 @@
+package com.lagou.test;
+
+import java.util.List;
+
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+
+
+import com.lagou.bizImp.ResumeinfoBIZImp;
+import com.lagou.dao.ResumeinfoDAO;
+import com.lagou.domain.Companyinfo;
+import com.lagou.domain.Resumeinfo;
+import com.lagou.vo.ResumeSearchVO;
+
+public class SubResumeinfoDaoTest {
+
+	public static void main(String[] args) {
+	System.out.println("kaishi");
+//	ResumeinfoDAO subResumeinfoDAO=new ResumeinfoDAO();
+//	ResumeSearchVO rSearchVO=new ResumeSearchVO(1, 1, 1);
+//	Companyinfo companyinfo =new Companyinfo();
+//	companyinfo.setCompanyId(1);
+//	List<Resumeinfo> list=subResumeinfoDAO.findAll();
+////	List<Resumeinfo> list=subResumeinfoDAO.findByResumeStatuss(companyinfo, 1, rSearchVO);
+//	System.out.println(list);
+//	Resumeinfo resumeinfo=new Resumeinfo();
+//	resumeinfo.setResumeId(1);
+//	resumeInfoBIZ.SaveResume(resumeinfo);
+	
+	
+//	ApplicationContext context=new ClassPathXmlApplicationContext("/applicationContext.xml");
+//	ResumeinfoDAO resumeinfoDAO=(ResumeinfoDAO) context.getBean("ResumeinfoDAO");
+//	ResumeInfoBIZ resumeInfoBIZ=new ResumeInfoBIZ();
+//	resumeInfoBIZ.setResumeinfoDAO(resumeinfoDAO);
+//	List<Resumeinfo> list=resumeInfoBIZ.findall();
+	
+	
+	
+	ApplicationContext context=new ClassPathXmlApplicationContext("/applicationContext.xml");
+	ResumeinfoDAO resumeinfoDAO=(ResumeinfoDAO) context.getBean("ResumeinfoDAO");
+	ResumeinfoBIZImp resumeInfoBIZ=new ResumeinfoBIZImp();
+	resumeInfoBIZ.setResumeinfoDAO(resumeinfoDAO);
+	
+	ResumeSearchVO rSearchVO=new ResumeSearchVO(1, 1, 1);
+	Companyinfo companyinfo =new Companyinfo();
+	companyinfo.setCompanyId(1);
+	List<Resumeinfo> list=resumeInfoBIZ.findByResumeStatuss(companyinfo, 1, rSearchVO);
+	System.out.println(list);
+	System.out.println("jieshu");
+	}
+	
+}
+

@@ -1,0 +1,311 @@
+package com.lagou.dao;
+
+import java.sql.Timestamp;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+import java.util.Set;
+
+import net.sf.json.JSONArray;
+import net.sf.json.JsonConfig;
+
+import org.hibernate.Criteria;
+import org.hibernate.LockOptions;
+import org.hibernate.Query;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Criterion;
+import org.hibernate.criterion.MatchMode;
+import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Restrictions;
+
+import static org.hibernate.criterion.Example.create;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.context.ApplicationContext;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.lagou.domain.Jobinfo;
+import com.lagou.domain.Sal;
+import com.lagou.vo.JobSearchVO;
+
+/**
+ * A data access object (DAO) providing persistence and search support for
+ * Jobinfo entities. Transaction control of the save(), update() and delete()
+ * operations can directly support Spring container-managed transactions or they
+ * can be augmented to handle user-managed Spring transactions. Each of these
+ * methods provides additional information for how to configure it for the
+ * desired type of transaction control.
+ * 
+ * @see com.lagou.domain.Jobinfo
+ * @author MyEclipse Persistence Tools
+ */
+@Transactional
+public class JobinfoDAO {
+	private static final Logger log = LoggerFactory.getLogger(JobinfoDAO.class);
+	// property constants
+	public static final String JOB_LOWSAL = "jobLowsal";
+	public static final String JOB_HIGHSAL = "jobHighsal";
+	public static final String JOB_NAME = "jobName";
+	public static final String JOB_DEPARTMENT = "jobDepartment";
+	public static final String JOB_CITY = "jobCity";
+	public static final String JOB_ADVANTAGE = "jobAdvantage";
+	public static final String JOB_DESCRIPE = "jobDescripe";
+	public static final String JOB_ADDRESS = "jobAddress";
+	public static final String JOB_EMAIL = "jobEmail";
+
+	private SessionFactory sessionFactory;
+
+	/**
+	 * 
+	 * 按照jobinfo下Jobdeliver记录的数量排序(最热)
+	 * 
+	 * @return 符合条件的职位信息列表
+	 * @author 姜翔宇
+	 */
+	public List<Jobinfo> findByHot() {
+		String hql = "from Jobinfo where jobstatus.statusId=1 or jobstatus.statusId=3 "
+				+ "order by jobdelivers.size desc ";
+		Query query = sessionFactory.getCurrentSession().createQuery(hql);
+		return query.list();
+	}
+
+	/**
+	 * 按照发布时间倒序查找职位信息(最新)
+	 * 
+	 * @return 符合条件的职位信息列表
+	 */
+	public List<Jobinfo> findByNew() {
+		String hql = "from Jobinfo where jobstatus.statusId=1 or jobstatus.statusId=3 "
+				+ "order by jobStartTime desc ";
+		Query query = sessionFactory.getCurrentSession().createQuery(hql);
+		return query.list();
+
+	}
+
+	/**
+	 * 按照多条件(月薪范围,工作经验,学历,工作性质,发布时间)查询职位信息
+	 * 
+	 * @param jobsearchVo
+	 * @return 符合条件的职位信息列表
+	 */
+	public List<Jobinfo> findBySearch(JobSearchVO jobSearchVO) {
+		Criteria criteria = getCurrentSession().createCriteria(Jobinfo.class);
+
+		criteria.add(Restrictions.disjunction()
+				.add(Restrictions.eq("jobstatus.statusId", 1))
+				.add(Restrictions.eq("jobstatus.statusId", 3)));
+
+		if (jobSearchVO.getDate() != null) {
+			Date nowDate = new Date();
+			Calendar calendar = Calendar.getInstance();
+			calendar.add(Calendar.DAY_OF_MONTH, -1 * (jobSearchVO.getDate()));
+			Date oldDate = calendar.getTime();
+
+			criteria.add(Restrictions.between("jobStartTime", oldDate, nowDate));
+
+		}
+		if (jobSearchVO.getJobTypeId() != null) {
+			criteria.createCriteria("jobtype").add(
+					Restrictions.like("jobtype.typePath",
+							"|" + jobSearchVO.getJobTypeId() + "|",
+							MatchMode.ANYWHERE));
+		}
+		if (jobSearchVO.getCity() != null) {
+			criteria.createCriteria("jobtype").add(
+					Restrictions.like("jobtype.typePath",
+							jobSearchVO.getCity(), MatchMode.START));
+		}
+		if (jobSearchVO.getEdu() != null && jobSearchVO.getEdu() != 1) {
+			criteria.add(Restrictions.eq("jobedu.eduId", jobSearchVO.getEdu()));
+		}
+		if (jobSearchVO.getWorkEXP() != null && jobSearchVO.getWorkEXP() != 1) {
+			criteria.add(Restrictions.eq("jobexp.expId",
+					jobSearchVO.getWorkEXP()));
+		}
+		if (jobSearchVO.getSal() == null) {
+
+		} else {
+			Sal sal = new SalDAO().findById(jobSearchVO.getSal());
+			Criterion c1 = Restrictions.le("jobLowsal", sal.getSalMax());
+			Criterion c2 = Restrictions.le("jobLowsal", sal.getSalMax());
+			criteria.add(Restrictions.disjunction().add(c1).add(c2));
+		}
+		if (jobSearchVO.getJobProp() != null) {
+			Criterion criterion = Restrictions.eq("jobprop.propId",
+					jobSearchVO.getJobProp());
+			criteria.add(criterion);
+		}
+
+		return criteria.list();
+	}
+
+	public void setSessionFactory(SessionFactory sessionFactory) {
+		this.sessionFactory = sessionFactory;
+	}
+
+	private Session getCurrentSession() {
+		return sessionFactory.getCurrentSession();
+	}
+
+	protected void initDao() {
+		// do nothing
+	}
+
+	public void save(Jobinfo transientInstance) {
+		log.debug("saving Jobinfo instance");
+		try {
+			getCurrentSession().save(transientInstance);
+			log.debug("save successful");
+		} catch (RuntimeException re) {
+			log.error("save failed", re);
+			throw re;
+		}
+	}
+
+	public void delete(Jobinfo persistentInstance) {
+		log.debug("deleting Jobinfo instance");
+		try {
+			getCurrentSession().delete(persistentInstance);
+			log.debug("delete successful");
+		} catch (RuntimeException re) {
+			log.error("delete failed", re);
+			throw re;
+		}
+	}
+
+	public Jobinfo findById(java.lang.Integer id) {
+		log.debug("getting Jobinfo instance with id: " + id);
+		try {
+			Jobinfo instance = (Jobinfo) getCurrentSession().get(
+					"com.lagou.domain.Jobinfo", id);
+			return instance;
+		} catch (RuntimeException re) {
+			log.error("get failed", re);
+			throw re;
+		}
+	}
+
+	public List<Jobinfo> findBy() {
+		return null;
+	}
+
+	public List<Jobinfo> findByExample(Jobinfo instance) {
+		log.debug("finding Jobinfo instance by example");
+		try {
+			List<Jobinfo> results = (List<Jobinfo>) getCurrentSession()
+					.createCriteria("com.lagou.domain.Jobinfo")
+					.add(create(instance)).list();
+			log.debug("find by example successful, result size: "
+					+ results.size());
+			return results;
+		} catch (RuntimeException re) {
+			log.error("find by example failed", re);
+			throw re;
+		}
+	}
+
+	public List findByProperty(String propertyName, Object value) {
+		log.debug("finding Jobinfo instance with property: " + propertyName
+				+ ", value: " + value);
+		try {
+			String queryString = "from Jobinfo as model where model."
+					+ propertyName + "= ?";
+			Query queryObject = getCurrentSession().createQuery(queryString);
+			queryObject.setParameter(0, value);
+			return queryObject.list();
+		} catch (RuntimeException re) {
+			log.error("find by property name failed", re);
+			throw re;
+		}
+	}
+
+	public List<Jobinfo> findByJobLowsal(Object jobLowsal) {
+		return findByProperty(JOB_LOWSAL, jobLowsal);
+	}
+
+	public List<Jobinfo> findByJobHighsal(Object jobHighsal) {
+		return findByProperty(JOB_HIGHSAL, jobHighsal);
+	}
+
+	public List<Jobinfo> findByJobName(Object jobName) {
+		return findByProperty(JOB_NAME, jobName);
+	}
+
+	public List<Jobinfo> findByJobDepartment(Object jobDepartment) {
+		return findByProperty(JOB_DEPARTMENT, jobDepartment);
+	}
+
+	public List<Jobinfo> findByJobCity(Object jobCity) {
+		return findByProperty(JOB_CITY, jobCity);
+	}
+
+	public List<Jobinfo> findByJobAdvantage(Object jobAdvantage) {
+		return findByProperty(JOB_ADVANTAGE, jobAdvantage);
+	}
+
+	public List<Jobinfo> findByJobDescripe(Object jobDescripe) {
+		return findByProperty(JOB_DESCRIPE, jobDescripe);
+	}
+
+	public List<Jobinfo> findByJobAddress(Object jobAddress) {
+		return findByProperty(JOB_ADDRESS, jobAddress);
+	}
+
+	public List<Jobinfo> findByJobEmail(Object jobEmail) {
+		return findByProperty(JOB_EMAIL, jobEmail);
+	}
+
+	public List findAll() {
+		log.debug("finding all Jobinfo instances");
+		try {
+			String queryString = "from Jobinfo";
+			Query queryObject = getCurrentSession().createQuery(queryString);
+			return queryObject.list();
+		} catch (RuntimeException re) {
+			log.error("find all failed", re);
+			throw re;
+		}
+	}
+
+	public Jobinfo merge(Jobinfo detachedInstance) {
+		log.debug("merging Jobinfo instance");
+		try {
+			Jobinfo result = (Jobinfo) getCurrentSession().merge(
+					detachedInstance);
+			log.debug("merge successful");
+			return result;
+		} catch (RuntimeException re) {
+			log.error("merge failed", re);
+			throw re;
+		}
+	}
+
+	public void attachDirty(Jobinfo instance) {
+		log.debug("attaching dirty Jobinfo instance");
+		try {
+			getCurrentSession().saveOrUpdate(instance);
+			log.debug("attach successful");
+		} catch (RuntimeException re) {
+			log.error("attach failed", re);
+			throw re;
+		}
+	}
+
+	public void attachClean(Jobinfo instance) {
+		log.debug("attaching clean Jobinfo instance");
+		try {
+			getCurrentSession().buildLockRequest(LockOptions.NONE).lock(
+					instance);
+			log.debug("attach successful");
+		} catch (RuntimeException re) {
+			log.error("attach failed", re);
+			throw re;
+		}
+	}
+
+	public static JobinfoDAO getFromApplicationContext(ApplicationContext ctx) {
+		return (JobinfoDAO) ctx.getBean("JobinfoDAO");
+	}
+}

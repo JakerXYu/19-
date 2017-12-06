@@ -1,0 +1,85 @@
+package com.lagou.vo;
+
+import java.util.Date;
+/**	多条件查询的VO对象
+ * 工作类型(jobTypeId)
+ *月薪(int minSal.int maxSal)
+ *工作经验(workEXP),
+ *学历(workEXP),
+ *工作性质(jobProp),
+ *发布时间(java.util.date)
+ *工作地点(城市)
+ **/
+public class JobSearchVO {
+	private Integer jobTypeId;
+	private Integer minSal;
+	private Integer maxSal;
+	private Integer edu;
+	private Integer workEXP;
+	private Integer jobProp;
+	private Date onlineDate;
+	private String city;
+	
+	
+	
+	
+	
+
+	public Integer getEdu() {
+		return edu;
+	}
+	public void setEdu(Integer edu) {
+		this.edu = edu;
+	}
+	public String getCity() {
+		return city;
+	}
+	public void setCity(String city) {
+		this.city = city;
+	}
+	public JobSearchVO() {
+		super();
+	}
+	public Integer getMinSal() {
+		return minSal;
+	}
+	public void setMinSal(Integer minSal) {
+		this.minSal = minSal;
+	}
+	public Integer getMaxSal() {
+		return maxSal;
+	}
+	public void setMaxSal(Integer maxSal) {
+		this.maxSal = maxSal;
+	}
+	public Integer getWorkEXP() {
+		return workEXP;
+	}
+	public void setWorkEXP(Integer workEXP) {
+		this.workEXP = workEXP;
+	}
+	public Integer getJobProp() {
+		return jobProp;
+	}
+	public void setJobProp(Integer jobProp) {
+		this.jobProp = jobProp;
+	}
+	public Date getOnlineDate() {
+		return onlineDate;
+	}
+	public void setOnlineDate(Date onlineDate) {
+		this.onlineDate = onlineDate;
+	}
+	public Integer getJobTypeId() {
+		return jobTypeId;
+	}
+	public void setJobTypeId(Integer jobTypeId) {
+		this.jobTypeId = jobTypeId;
+	}
+	
+	
+	
+	
+
+	
+}

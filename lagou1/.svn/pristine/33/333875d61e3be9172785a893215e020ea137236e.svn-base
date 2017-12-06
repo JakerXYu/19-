@@ -1,0 +1,101 @@
+package com.lagou.bizImp;
+
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import net.sf.json.JSONArray;
+import net.sf.json.JsonConfig;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
+
+import com.lagou.biz.JobinfoBIZ;
+import com.lagou.dao.JobinfoDAO;
+import com.lagou.domain.Jobinfo;
+import com.lagou.domain.Subscribe;
+import com.lagou.vo.JobSearchVO;
+
+@Service("JobinfoBIZImp")
+public class JobinfoBIZImp implements JobinfoBIZ {
+	@Autowired
+	@Qualifier("JobinfoDAO")
+	private JobinfoDAO jobinfoDAO;
+
+	@Override
+	public void save(Jobinfo jobinfo) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public List<Jobinfo> findAll() {
+		return this.jobinfoDAO.findAll();
+	}
+
+	@Override
+	public List<Jobinfo> findBySearch(JobSearchVO jobsearchVo) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String findByHot() {
+		try {
+			List<Jobinfo> jobinfoList = this.jobinfoDAO.findByHot();			
+			System.out.println(jobinfoList);
+			JsonConfig jsonConfig = new JsonConfig();
+			jsonConfig.setExcludes(new String[] { "reportjobs",
+					"auditionjudges", "jobdelivers", "userinfos", "messages",
+					"jobinfos", "useredus", "companyinfos", "subscribes",
+					"Jobtype.jobtype", "jobtypes", "expectjobs" });
+			/*jsonConfig.setExcludes(new String[] { "reportjobs",
+					"auditionjudges", "resumeinfo", "resumestatus",
+					"jobdeliver.jobinfo", "jobdeliver.auditioninfo","jobdeliver.resumeinfo",
+					"userinfos", "messages", "jobinfos", "useredus",
+					"companyinfos", "subscribes", "Jobtype.jobtype",
+					"jobtypes", "expectjobs" });*/
+			JSONArray jsonArray = JSONArray.fromObject(jobinfoList, jsonConfig);
+			System.out.println(jsonArray.toString());
+			return jsonArray.toString();
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+
+	}
+
+	@Override
+	public String findByNew() {
+		try {
+			List<Jobinfo> jobinfoList = this.jobinfoDAO.findByNew();
+			System.out.println(jobinfoList);
+			JsonConfig jsonConfig = new JsonConfig();
+			jsonConfig.setExcludes(new String[] { "reportjobs",
+					"auditionjudges", "jobdelivers", "userinfos", "messages",
+					"jobinfos", "useredus", "companyinfos", "subscribes",
+					"Jobtype.jobtype", "jobtypes", "expectjobs" });
+			JSONArray jsonArray = JSONArray.fromObject(jobinfoList, jsonConfig);
+			return jsonArray.toString();
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+	}
+
+	@Override
+	public String findBySubscribe(Subscribe subscribe) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public JobinfoDAO getJobinfoDAO() {
+		return jobinfoDAO;
+	}
+
+	public void setJobinfoDAO(JobinfoDAO jobinfoDAO) {
+		this.jobinfoDAO = jobinfoDAO;
+	}
+
+}

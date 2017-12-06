@@ -1,0 +1,116 @@
+package com.lagou.bizImp;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.lagou.biz.AdminsBIZ;
+import com.lagou.dao.AdminsDAO;
+import com.lagou.dao.FunsDAO;
+import com.lagou.dao.RolesDAO;
+import com.lagou.domain.Admins;
+import com.lagou.domain.Funs;
+import com.lagou.exception.NameMissException;
+import com.lagou.exception.PassErrorException;
+
+@Service("AdminsBIZImp")
+public  class AdminsBIZImp implements AdminsBIZ {
+	@Autowired@Qualifier("AdminsDAO")
+	private AdminsDAO adminsDAO;
+	@Autowired@Qualifier("FunsDAO")
+	private FunsDAO funsDAO;
+	
+	@Autowired@Qualifier("RolesDAO")
+	private RolesDAO rolesDAO;
+	
+	@Override
+	@Transactional(propagation=Propagation.REQUIRED,readOnly=true)
+	public List<Admins> findAll() {
+		return (List<Admins>) adminsDAO.findAll();
+	}
+	
+	@Override
+	@Transactional(propagation=Propagation.REQUIRED,rollbackFor={Exception.class})
+	public void saveAdmins(Admins admins) {
+		this.adminsDAO.save(admins);
+	}
+	
+	
+	@Override
+	@Transactional(propagation=Propagation.REQUIRED,rollbackFor={Exception.class})
+	public void delete(int adminId) {
+		this.adminsDAO.delete(adminId);
+	}
+	
+	@Override
+	@Transactional(propagation=Propagation.REQUIRED,readOnly=true)
+	public Admins findByName(String adminsName) {
+		
+		return this.adminsDAO.findByName(adminsName);
+	}
+
+	@Override
+	@Transactional(propagation=Propagation.REQUIRED,readOnly=true)
+	public List<Funs> findByRolesId(Integer id) {
+		
+		return (List<Funs>) this.rolesDAO.findByRolesId(id);
+	}
+	
+	@Override
+	@Transactional(propagation=Propagation.REQUIRED,rollbackFor={NameMissException.class,PassErrorException.class})
+	public Admins isLogin(String username, String password) throws NameMissException, PassErrorException {
+		
+		
+		Admins admin=this.adminsDAO.findByName(username);
+		if (admin==null) {
+			throw new NameMissException("管理员名字不存在");
+		}else {
+			if (admin.getAdminPass().equals(password)) {
+				admin.getRoles().setFunses(rolesDAO.findByRolesId(admin.getRoles().getRoleId()));
+				return admin;
+			}else {
+				throw new PassErrorException("密码错误");
+			}
+		}
+	}
+	
+	
+	@Override
+	@Transactional(propagation=Propagation.REQUIRED,readOnly=true)
+	public List<Funs> findByLevel(Integer level) {
+		return funsDAO.findByFunLevel(level);
+	}
+	
+
+
+	public AdminsDAO getAdminsDAO() {
+		return adminsDAO;
+	}
+
+	public void setAdminsDAO(AdminsDAO adminsDAO) {
+		this.adminsDAO = adminsDAO;
+	}
+
+	public RolesDAO getRolesDAO() {
+		return rolesDAO;
+	}
+
+	public void setRolesDAO(RolesDAO rolesDAO) {
+		this.rolesDAO = rolesDAO;
+	}
+
+	public FunsDAO getFunsDAO() {
+		return funsDAO;
+	}
+
+	public void setFunsDAO(FunsDAO funsDAO) {
+		this.funsDAO = funsDAO;
+	}
+	
+	
+	
+}

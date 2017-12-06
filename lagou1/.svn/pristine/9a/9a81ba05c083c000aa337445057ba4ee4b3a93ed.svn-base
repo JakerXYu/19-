@@ -1,0 +1,85 @@
+package com.lagou.domain;
+
+import java.util.HashSet;
+import java.util.Set;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import static javax.persistence.GenerationType.IDENTITY;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+
+/**
+ * Roles entity. @author MyEclipse Persistence Tools
+ */
+@Entity
+@Table(name = "roles", catalog = "lagou")
+public class Roles implements java.io.Serializable {
+
+	// Fields
+
+	private Integer roleId;
+	private String roleName;
+	private Set<Funs> funses = new HashSet<Funs>(0);
+	private Set<Admins> adminses = new HashSet<Admins>(0);
+
+	// Constructors
+
+	/** default constructor */
+	public Roles() {
+	}
+
+	/** full constructor */
+	public Roles(String roleName, Set<Funs> funses, Set<Admins> adminses) {
+		this.roleName = roleName;
+		this.funses = funses;
+		this.adminses = adminses;
+	}
+
+	// Property accessors
+	@Id
+	@GeneratedValue(strategy = IDENTITY)
+	@Column(name = "role_id", unique = true, nullable = false)
+	public Integer getRoleId() {
+		return this.roleId;
+	}
+
+	public void setRoleId(Integer roleId) {
+		this.roleId = roleId;
+	}
+
+	@Column(name = "role_name")
+	public String getRoleName() {
+		return this.roleName;
+	}
+
+	public void setRoleName(String roleName) {
+		this.roleName = roleName;
+	}
+
+	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@JoinTable(name = "permissions", catalog = "lagou", joinColumns = { @JoinColumn(name = "permission_role", updatable = false) }, inverseJoinColumns = { @JoinColumn(name = "permission_fun", updatable = false) })
+	public Set<Funs> getFunses() {
+		return this.funses;
+	}
+
+	public void setFunses(Set<Funs> funses) {
+		this.funses = funses;
+	}
+
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "roles")
+	public Set<Admins> getAdminses() {
+		return this.adminses;
+	}
+
+	public void setAdminses(Set<Admins> adminses) {
+		this.adminses = adminses;
+	}
+
+}

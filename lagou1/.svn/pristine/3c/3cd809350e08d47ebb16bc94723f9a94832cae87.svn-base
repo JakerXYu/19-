@@ -1,0 +1,71 @@
+package com.lagou.vo;
+
+import java.util.Date;
+/**	多条件查询的VO对象
+ *月薪(int min.int max)
+ *工作经验(int),
+ *学历(int),
+ *工作性质(int),
+ *发布时间(java.util.date)*/
+public class JobSearchVO {
+
+	private Integer minSal;
+	private Integer maxSal;
+	private Integer workEXP;
+	private Integer jobProp;
+	private Date onlineDate;
+	
+	
+	
+	
+	
+	
+	public JobSearchVO(Integer minSal, Integer maxSal, Integer workEXP,
+			Integer jobProp, Date onlineDate) {
+		super();
+		this.minSal = minSal;
+		this.maxSal = maxSal;
+		this.workEXP = workEXP;
+		this.jobProp = jobProp;
+		this.onlineDate = onlineDate;
+	}
+	public JobSearchVO() {
+		super();
+	}
+	public Integer getMinSal() {
+		return minSal;
+	}
+	public void setMinSal(Integer minSal) {
+		this.minSal = minSal;
+	}
+	public Integer getMaxSal() {
+		return maxSal;
+	}
+	public void setMaxSal(Integer maxSal) {
+		this.maxSal = maxSal;
+	}
+	public Integer getWorkEXP() {
+		return workEXP;
+	}
+	public void setWorkEXP(Integer workEXP) {
+		this.workEXP = workEXP;
+	}
+	public Integer getJobProp() {
+		return jobProp;
+	}
+	public void setJobProp(Integer jobProp) {
+		this.jobProp = jobProp;
+	}
+	public Date getOnlineDate() {
+		return onlineDate;
+	}
+	public void setOnlineDate(Date onlineDate) {
+		this.onlineDate = onlineDate;
+	}
+	
+	
+	
+	
+
+	
+}

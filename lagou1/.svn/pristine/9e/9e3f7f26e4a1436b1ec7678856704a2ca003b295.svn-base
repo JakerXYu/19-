@@ -1,0 +1,71 @@
+package com.lagou.listener;
+
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.ServletContext;
+import javax.servlet.ServletContextEvent;
+import javax.servlet.ServletContextListener;
+import javax.servlet.annotation.WebListener;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.ApplicationContext;
+import org.springframework.web.context.support.WebApplicationContextUtils;
+
+import com.lagou.biz.CityinfoBIZ;
+import com.lagou.biz.CompanyfieldBIZ;
+import com.lagou.biz.CompanystageBIZ;
+import com.lagou.biz.JobTypeBIZ;
+import com.lagou.biz.SalBIZ;
+import com.lagou.domain.Cityinfo;
+import com.lagou.domain.Companyfield;
+import com.lagou.domain.Companystage;
+import com.lagou.domain.Jobtype;
+import com.lagou.domain.Sal;
+import com.opensymphony.xwork2.ActionContext;
+
+/**
+ * Application Lifecycle Listener implementation class InitCompanystateListener
+ *
+ */
+@WebListener
+public class InitListener implements ServletContextListener {
+	
+	
+    public void contextInitialized(ServletContextEvent arg0)  { 
+    	ServletContext app = arg0.getServletContext();
+    	ApplicationContext context = WebApplicationContextUtils.getWebApplicationContext(app);
+    	
+    	CompanystageBIZ companystageBIZ = (CompanystageBIZ) context.getBean("CompanystageBIZImp");
+    	List<Companystage> stagelist = companystageBIZ.findAll();
+    	
+    	CompanyfieldBIZ companyfieldBIZ = (CompanyfieldBIZ) context.getBean("CompanyfieldBIZImp");
+    	List<Companyfield> fieldlist = companyfieldBIZ.findAll();
+    	
+    	CityinfoBIZ cityinfoBIZ = (CityinfoBIZ) context.getBean("CityinfoBIZImp");
+    	List<Cityinfo> citylist = cityinfoBIZ.findAll();
+    	
+    	SalBIZ salbiz = (SalBIZ) context.getBean("SalBIZImp");
+    	List<Sal> sallist = salbiz.findAll();
+    	
+    	JobTypeBIZ jobtypeBIZ=(JobTypeBIZ) context.getBean("JobTypeBIZImp");
+    	List<Jobtype> typelvlist = jobtypeBIZ.findBylv();
+    	
+    	app.setAttribute("sallist", sallist);
+    	app.setAttribute("citylist", citylist);
+    	app.setAttribute("stagelist", stagelist);
+    	app.setAttribute("fieldlist", fieldlist);
+    	app.setAttribute("typelvlist", typelvlist);
+    	
+    	
+    }
+
+	
+    public void contextDestroyed(ServletContextEvent arg0)  { 
+         // TODO Auto-generated method stub
+    }
+
+
+	
+}

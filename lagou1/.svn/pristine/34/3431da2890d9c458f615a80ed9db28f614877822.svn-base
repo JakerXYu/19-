@@ -1,0 +1,8 @@
+package com.lagou.biz;
+
+import com.lagou.domain.Userinfo;
+import com.lagou.exception.NameExist;
+
+public interface UserinfoBIZ {
+public void reg(Userinfo user) throws NameExist;
+}
